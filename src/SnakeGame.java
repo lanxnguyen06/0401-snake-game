@@ -195,15 +195,19 @@ public class SnakeGame extends PApplet {
         // for each case below (we need to map our Direction to the keyCode)
         switch (keyCode) {
             case UP:
+                snake.setDirection(Direction.UP); // maps direction UP to keycode, does same for rest
                 headImage = assets.get("head_up");
                 break;
             case DOWN:
+                snake.setDirection(Direction.DOWN);
                 headImage = assets.get("head_down");
                 break;
             case LEFT:
+                snake.setDirection(Direction.LEFT);
                 headImage = assets.get("head_left");
                 break;
             case RIGHT:
+                snake.setDirection(Direction.RIGHT);
                 headImage = assets.get("head_right");
                 break;
             default:

@@ -17,9 +17,12 @@ public abstract class Food {
         int randomNumber = new Random().nextInt(maxActiveFoodItems);
 
         switch (randomNumber) {
-            // TODO: Add two more food items!
             case 0:
                 return new Cherry(position);
+            case 1:
+                return new Apple(position);
+            case 2:
+                return new Lemon(position);
             default:
                 return null;
         }
