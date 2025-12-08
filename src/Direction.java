@@ -11,17 +11,15 @@ public enum Direction {
     UP;
 
     public Position deltaPosition() {
-        // TODO: should return the new position after the snake has moved
-        // The position should either move +1 or -1 along the x or y axis
         switch(this){
             case DOWN:
-                return new Position(0, 1);
+                return new Position(0, 1); // positive 1 because (0, 0) starts in the bottom left corner, so going down would mean it's increasing value
             case RIGHT:
                 return new Position (1, 0);
             case LEFT:
-                return new Position(-1, 0);
+                return new Position(-1, 0); 
             case UP:
-                return new Position(0, -1);
+                return new Position(0, -1); // negative 1 because (0, 0) starts in the bottom left corner, so going up would mean it's decreasing
             default:
                 return new Position(0, 0); // default position if not moving
         }

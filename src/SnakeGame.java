@@ -133,7 +133,7 @@ public class SnakeGame extends PApplet {
         snake = new Snake();
 
         // Reset direction to default
-        snake.setDirection(RIGHT);
+        snake.setDirection(Direction.RIGHT);
         snake.shouldGrow();
 
         // Reset head image to match the starting direction
@@ -168,10 +168,13 @@ public class SnakeGame extends PApplet {
                 segment.getPosition().y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
     }
 
-    // TODO: Implement drawBody()
-    // Draws the snake's body
     public void drawBody() {
-        // HINT: Make use of drawSegment()!
+        SnakeSegment current = snake.getBody(); // calls the node after the head
+
+        while (current != null){ // as long as the snake doesn't just have a head
+            drawSegment(current); // draw the body
+            current = current.getNext(); // moves onto the next part of the body
+        }
 
     }
 
@@ -191,8 +194,6 @@ public class SnakeGame extends PApplet {
          * (the 'keyCode' is not the same as 'Direction'!)
          */
         
-        // TODO: Set the snake's direction depending on pressing a key
-        // for each case below (we need to map our Direction to the keyCode)
         switch (keyCode) {
             case UP:
                 snake.setDirection(Direction.UP); // maps direction UP to keycode, does same for rest
