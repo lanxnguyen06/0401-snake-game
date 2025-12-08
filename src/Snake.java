@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Snake {
     private SnakeSegment head;
-    private Direction direction; // TODO: Set the default direction to RIGHT
+    private Direction direction; 
 
     private boolean shouldGrow = false;
 
@@ -17,16 +17,24 @@ public class Snake {
         // Feel free to make the starting position random
         Position startingPosition = new Position(10, 10);
         head = new SnakeSegment(startingPosition);
+        direction = Direction.RIGHT;
     }
 
     public void shouldGrow() {
         shouldGrow = true;
     }
 
-    // TODO: Implement removeTail()
-    // Removes the last node (tail) of the snake, leaves head untouched
     private void removeTail() {
+        if (head.getNext() == null) {
+            return;
+        }
 
+        SnakeSegment current = head; // set the current to head
+
+        while(current.getNext().getNext() != null) { // check if the segment 2 positions ahead is not null
+            current = current.getNext(); // if true set current to next node
+        }
+        current.setNext(null); // removes last node (tail)
     }
 
     // Returns true if the snake is colliding with itself
@@ -34,13 +42,26 @@ public class Snake {
         if (isBodyPartAt(head.getPosition())) {
             return true;
         }
+
+        // optional extra credit collision on the walls
+        int maxX = SnakeGame.WIDTH / SnakeGame.SQUARE_SIZE; // snakegame.width is the screen width while square_size is the size of each square where the snake moves in. dividing them will give the amount of squares horizontally
+        int maxY = SnakeGame.HEIGHT / SnakeGame.SQUARE_SIZE; // same thing here, gives the amount of squares vertically
+        if (head.getPosition().x < 0 || head.getPosition().x >= maxX || head.getPosition().y < 0 || head.getPosition().y >= maxY){
+            return true;
+        }
+
         return false;
     }
 
-    // TODO: Implement isBodyPartAt()
-    // Returns false if the specified position is inside the body of the snake
     public boolean isBodyPartAt(Position position) {
-        return false;
+        SnakeSegment current = head.getNext(); // set the current to the next node
+        while(current != null) {
+            if (current.getPosition().equals(position)) {  // checks if there's a body part at this position
+                return true; // collision
+            }
+            current = current.getNext();
+        }
+        return false; // no collision
     }
 
     // Sets the direction the snake will move in
@@ -48,31 +69,34 @@ public class Snake {
         this.direction = direction;
     }
 
-    // TODO: Implement getLength()
     // Gets the length of the snake
     public int getLength() {
         int count = 0;
-
+        SnakeSegment current = head;
+        while(current != null) { // 
+            count ++; 
+            current = current.getNext();
+        }
         return count;
     }
 
     // Moves the snake by one in the next direction
-    // TODO: Implement move()
+    // we added the optional collision method to isColliding() instead because we wanted the game over screen to show up
     public void move() {
-        Position newPosition = head.getPosition().add(direction.deltaPosition());
+        if (direction == null) {
+            return;
+        }
+        Position newPosition = head.getPosition().add(direction.deltaPosition()); // gets the current position of the head and adds a direction to it so it can move
 
-        // HINT: Check for collision with edges (SnakeGame.HEIGHT / SnakeGame.WIDTH)
-        // HINT: Add and remove nodes here
+        SnakeSegment newHead = new SnakeSegment (newPosition); // snake's new head
+        newHead.setNext(head); // new head points to old head
+        head = newHead; // updates head to new head
 
-        // TODO: Uncomment and use the following code snippet!
-        // if (!shouldGrow) {
-        // removeTail();
-        // } else {
-        // shouldGrow = false;
-        // }
-
-        // * OPTIONAL: also handle wrapping left and right
-        // * Or check for a collision with the top and bottom of the frame
+        if (!shouldGrow) {
+            removeTail(); // if it's not growing remove the tail so when head is added it looks like it stays the same length
+        } else {
+            shouldGrow = false; 
+        }
     }
 
     // Return the head of the snake
@@ -80,10 +104,9 @@ public class Snake {
         return this.head;
     }
 
-    // TODO: Implement getBody()
     // Returns the start of the snake's body (NOT the head!)
     public SnakeSegment getBody() {
-        return null;
+        return head.getNext();
     }
 
     // OPTIONAL: Implement an algorithm that moves the food for us
